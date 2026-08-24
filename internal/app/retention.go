@@ -8,7 +8,8 @@ func (s *Service) RetainSince(cutoff time.Time) int {
 	kept := s.store.audits[:0]
 	removed := 0
 	for _, record := range s.store.audits {
-		if record.CreatedAt.Before(cutoff) && !record.CreatedAt.IsZero() {
+		isBeforeCutoff := record.CreatedAt.Before(cutoff)
+		if isBeforeCutoff && !record.CreatedAt.IsZero() {
 			removed++
 			continue
 		}
