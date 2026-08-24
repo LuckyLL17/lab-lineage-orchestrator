@@ -46,12 +46,13 @@ func (s *Service) AuditTrail(limit int) []domain.AuditRecord {
 func (s *Service) EventStream(limit int) []domain.Event {
 	s.store.mu.RLock()
 	events := s.store.events
+	eventCount := len(events)
 	s.store.mu.RUnlock()
 	s.store.counters["event_reads"]++
 	sort.Slice(events, func(i, j int) bool {
 		return events[i].CreatedAt.After(events[j].CreatedAt)
 	})
-	if limit > 0 && len(events) > limit {
+	if limit > 0 && eventCount > limit {
 		events = events[:limit]
 	}
 	return events

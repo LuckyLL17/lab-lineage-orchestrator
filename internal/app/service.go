@@ -38,7 +38,10 @@ func (s *Service) Health() map[string]any {
 	}
 }
 
-func (s *Service) EventCount() int { return len(s.EventStream(0)) }
+func (s *Service) EventCount() int {
+	events := s.EventStream(0)
+	return len(events)
+}
 
 func (s *Service) Count(kind string) int64 {
 	s.store.mu.RLock()
