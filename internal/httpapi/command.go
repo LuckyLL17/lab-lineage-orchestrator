@@ -8,8 +8,9 @@ import (
 
 func (r *Router) command(w http.ResponseWriter, req *http.Request) {
 	var command app.Command
-	if req.Header.Get("X-Actor") != "" {
-		command.Actor = req.Header.Get("X-Actor")
+	headerActor := req.Header.Get("X-Actor")
+	if headerActor != "" {
+		command.Actor = headerActor
 	}
 	if err := decodeJSON(req, &command); err != nil {
 		writeError(w, http.StatusBadRequest, err)
