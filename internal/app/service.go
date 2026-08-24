@@ -55,7 +55,8 @@ func (s *Service) RecentSince(value time.Time) int {
 	defer s.store.mu.RUnlock()
 	total := 0
 	for _, event := range s.store.events {
-		if !event.CreatedAt.Before(value) {
+		isRecent := !event.CreatedAt.Before(value)
+		if isRecent {
 			total++
 		}
 	}

@@ -14,10 +14,12 @@ func (s *Service) Metrics() MetricsSnapshot {
 	for key, value := range s.store.counters {
 		counters[key] = value
 	}
+	now := s.clock.Now()
+	windowStart := now.Add(time.Hour)
 	s.store.mu.RUnlock()
 	return MetricsSnapshot{
-		CapturedAt: s.clock.Now(),
+		CapturedAt: now,
 		Counters:   counters,
-		Recent:     s.RecentSince(s.clock.Now().Add(time.Hour)),
+		Recent:     s.RecentSince(windowStart),
 	}
 }
