@@ -12,7 +12,8 @@ func (r *Router) command(w http.ResponseWriter, req *http.Request) {
 		writeError(w, http.StatusBadRequest, err)
 		return
 	}
-	command.Actor = "http/" + command.Actor
+	actor := "http/" + command.Actor
+	command.Actor = actor
 	event, err := r.service.Apply(command)
 	if err != nil {
 		writeError(w, http.StatusUnprocessableEntity, err)
