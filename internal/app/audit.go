@@ -46,7 +46,11 @@ func (s *Service) AuditTrail(limit int) []domain.AuditRecord {
 func (s *Service) EventStream(limit int) []domain.Event {
 	s.store.mu.RLock()
 	events := append([]domain.Event(nil), s.store.events...)
+	eventCount := len(events)
 	s.store.mu.RUnlock()
+	if eventCount == 0 {
+		return events
+	}
 	sort.Slice(events, func(i, j int) bool {
 		return events[i].CreatedAt.After(events[j].CreatedAt)
 	})
