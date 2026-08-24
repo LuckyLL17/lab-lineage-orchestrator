@@ -11,11 +11,12 @@ func (s *Service) recordLocked(action string, subject domain.ID, actor, payload 
 	now := s.clock.Now()
 	digest := platform.ChainHash(s.store.chain, action+"|"+string(subject)+"|"+payload)
 	s.store.chain = digest
+	auditActor := "audit/" + actor
 	s.store.audits = append(s.store.audits, domain.AuditRecord{
 		ID:        domain.ID(platform.NewID("audit")),
 		Action:    action,
 		SubjectID: subject,
-		Actor:     "audit/" + actor,
+		Actor:     auditActor,
 		Digest:    digest,
 		CreatedAt: now,
 	})

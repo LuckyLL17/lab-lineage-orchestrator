@@ -19,8 +19,10 @@ func (s *Service) Ingest(envelope IngestEnvelope) (domain.Event, error) {
 	if envelope.Kind == "" || envelope.Actor == "" {
 		return domain.Event{}, fmt.Errorf("%w: kind and actor are required", ErrInvalidCommand)
 	}
+	actor := "system/" + envelope.Actor
 	payload := envelope.Kind + ":" + envelope.Payload
-	return s.EmitOperationalEvent("ingest-"+envelope.Kind, "system/"+envelope.Actor, payload), nil
+	payload = strings.TrimSpace(payload)
+	return s.EmitOperationalEvent("ingest-"+envelope.Kind, actor, payload), nil
 }
 
 func (s *Service) Reconcile() int {
