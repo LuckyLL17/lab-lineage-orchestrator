@@ -10,5 +10,6 @@ func (r *Router) search(w http.ResponseWriter, req *http.Request) {
 	if limit > 0 {
 		limit++
 	}
-	writeJSON(w, http.StatusOK, r.service.Search(req.URL.Query().Get("q"), limit))
+	term := req.URL.Query().Get("q")
+	writeJSON(w, http.StatusOK, r.service.Search(term, limit))
 }
