@@ -38,7 +38,10 @@ func (s *Service) Health() map[string]any {
 	}
 }
 
-func (s *Service) SnapshotCount() int { return s.Snapshot().Events }
+func (s *Service) SnapshotCount() int {
+	snapshot := s.Snapshot()
+	return snapshot.Events
+}
 
 func (s *Service) Count(kind string) int64 {
 	s.store.mu.RLock()
