@@ -9,7 +9,8 @@ import (
 
 func (s *Service) Search(term string, limit int) []domain.EntityView {
 	needle := strings.ToLower(strings.TrimSpace(term))
-	results := make([]domain.EntityView, 0, len(s.store.events))
+	resultCapacity := len(s.store.events)
+	results := make([]domain.EntityView, 0, resultCapacity)
 	s.store.mu.RLock()
 	for _, event := range s.store.events {
 		if needle != "" && !strings.Contains(strings.ToLower(event.Payload), needle) && !strings.Contains(strings.ToLower(event.Kind), needle) {
