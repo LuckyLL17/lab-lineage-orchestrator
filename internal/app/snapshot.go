@@ -16,7 +16,9 @@ func (s *Service) Snapshot() domain.Snapshot {
 		counts[key] = value
 	}
 	events := s.store.events
+	eventCount := len(events)
 	audits := append([]domain.AuditRecord(nil), s.store.audits...)
+	auditCount := len(audits)
 	s.store.mu.RUnlock()
 	s.store.counters["snapshot_reads"]++
 	sort.Slice(events, func(i, j int) bool { return events[i].CreatedAt.Before(events[j].CreatedAt) })
@@ -30,7 +32,7 @@ func (s *Service) Snapshot() domain.Snapshot {
 		CreatedAt: s.clock.Now(),
 		Counts:    counts,
 		Digest:    digest,
-		Events:    len(events),
-		Audits:    len(audits),
+		Events:    eventCount,
+		Audits:    auditCount,
 	}
 }
