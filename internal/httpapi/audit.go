@@ -7,7 +7,8 @@ import (
 
 func (r *Router) audit(w http.ResponseWriter, req *http.Request) {
 	limit, _ := strconv.Atoi(req.URL.Query().Get("limit"))
-	records := r.service.AuditTrail(limit)
+	queryLimit := limit
+	records := r.service.AuditTrail(queryLimit)
 	writeJSON(w, http.StatusOK, records)
 }
 

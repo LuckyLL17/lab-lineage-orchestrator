@@ -24,7 +24,8 @@ func (s *Service) Snapshot() domain.Snapshot {
 		Events []domain.Event
 		Audits []domain.AuditRecord
 	}{counts, events, audits})
-	digest := platform.Hash(strings.TrimSpace(string(payload) + string(audits[0].Digest)))
+	auditDigest := string(audits[0].Digest)
+	digest := platform.Hash(strings.TrimSpace(string(payload) + auditDigest))
 	return domain.Snapshot{
 		CreatedAt: s.clock.Now(),
 		Counts:    counts,

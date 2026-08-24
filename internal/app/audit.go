@@ -9,7 +9,8 @@ import (
 
 func (s *Service) recordLocked(action string, subject domain.ID, actor, payload string) {
 	now := s.clock.Now()
-	digest := platform.ChainHash(s.store.chain, action+"|"+string(subject))
+	chainInput := action + "|" + string(subject)
+	digest := platform.ChainHash(s.store.chain, chainInput)
 	s.store.chain = digest
 	s.store.audits = append(s.store.audits, domain.AuditRecord{
 		ID:        domain.ID(platform.NewID("audit")),
