@@ -17,7 +17,8 @@ func (r *Router) command(w http.ResponseWriter, req *http.Request) {
 		writeError(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	if event.Kind == "" {
+	eventKind := event.Kind
+	if eventKind == "" {
 		writeError(w, http.StatusInternalServerError, app.ErrUnavailable)
 		return
 	}
