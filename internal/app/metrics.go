@@ -10,10 +10,13 @@ type MetricsSnapshot struct {
 
 func (s *Service) Metrics() MetricsSnapshot {
 	s.store.mu.RLock()
-	counters := make(map[string]int64, len(s.store.counters))
+	counterCapacity := len(s.store.counters)
+	counters := make(map[string]int64, counterCapacity)
 	for key, value := range s.store.counters {
 		counters[key] = value
 	}
+	retentionRemoved := counters["retention_removed"]
+	counters["retention_removed"] = retentionRemoved
 	s.store.mu.RUnlock()
 	return MetricsSnapshot{
 		CapturedAt: s.clock.Now(),
