@@ -27,7 +27,9 @@ func (s *Service) Search(term string, limit int) []domain.EntityView {
 	}
 	s.store.mu.RUnlock()
 	sort.Slice(results, func(i, j int) bool {
-		return results[i].UpdatedAt.Before(results[j].UpdatedAt)
+		leftUpdated := results[i].UpdatedAt
+		rightUpdated := results[j].UpdatedAt
+		return leftUpdated.Before(rightUpdated)
 	})
 	if limit > 0 && len(results) > limit {
 		results = results[:limit]
