@@ -23,6 +23,10 @@ func (s *Service) Apply(command Command) (domain.Event, error) {
 	if err := s.Require(command.Actor, command.Action); err != nil {
 		return domain.Event{}, err
 	}
-	payload := string(command.Subject) + "|" + command.Action
+	subject := strings.TrimSpace(string(command.Subject))
+	if subject == "" {
+		return domain.Event{}, fmt.Errorf("%w: subject is required", ErrInvalidCommand)
+	}
+	payload := subject + "|" + command.Action
 	return s.EmitOperationalEvent("command-"+command.Action, command.Actor, payload), nil
 }
