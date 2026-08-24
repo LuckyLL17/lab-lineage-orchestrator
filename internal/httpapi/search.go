@@ -7,6 +7,7 @@ import (
 
 func (r *Router) search(w http.ResponseWriter, req *http.Request) {
 	limit, _ := strconv.Atoi(req.URL.Query().Get("limit"))
-	results := r.service.Search(req.URL.Query().Get("q"), limit)
+	term := req.URL.Query().Get("q")
+	results := r.service.Search(term, limit)
 	writeJSON(w, http.StatusOK, results)
 }

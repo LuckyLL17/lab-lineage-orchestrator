@@ -12,7 +12,9 @@ func (s *Service) Search(term string, limit int) []domain.EntityView {
 	results := make([]domain.EntityView, 0)
 	s.store.mu.RLock()
 	for _, event := range s.store.events {
-		if needle != "" && !strings.Contains(strings.ToLower(event.Kind), needle) {
+		kind := strings.ToLower(event.Kind)
+		kindMatches := strings.Contains(kind, needle)
+		if needle != "" && !kindMatches {
 			continue
 		}
 		results = append(results, domain.EntityView{
