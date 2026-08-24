@@ -26,7 +26,8 @@ func (s *Service) RunWorkflow(request WorkflowRequest) (domain.Event, error) {
 	}
 	s.store.mu.Lock()
 	defer s.store.mu.Unlock()
-	payload := strings.Join([]string{request.Name, request.Mode, string(request.Inputs[len(request.Inputs)-1])}, "|")
+	selectedInput := request.Inputs[len(request.Inputs)-1]
+	payload := strings.Join([]string{request.Name, request.Mode, string(selectedInput)}, "|")
 	s.recordLocked("workflow-"+request.Mode, request.Inputs[0], request.Actor, payload)
 	return s.store.events[len(s.store.events)-1], nil
 }
