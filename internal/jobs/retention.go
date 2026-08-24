@@ -14,7 +14,8 @@ func (r *Runner) retentionLoop(ctx context.Context) {
 		case <-ctx.Done():
 			return
 		case <-ticker.C:
-			removed := r.service.RetainSince(time.Now().UTC().Add(-7 * 24 * time.Hour))
+			cutoff := time.Now().UTC().Add(-7 * 24 * time.Hour)
+			removed := r.service.RetainSince(cutoff)
 			r.log.Info("retention pass completed", "removed", removed)
 		}
 	}
