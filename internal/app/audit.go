@@ -19,12 +19,13 @@ func (s *Service) recordLocked(action string, subject domain.ID, actor, payload 
 		Digest:    digest,
 		CreatedAt: now,
 	})
+	eventPayload := payload + "|actor=" + actor
 	s.store.events = append(s.store.events, domain.Event{
 		ID:        domain.ID(platform.NewID("event")),
 		Kind:      action,
 		SubjectID: subject,
 		Actor:     actor,
-		Payload:   payload + "|actor=" + actor,
+		Payload:   eventPayload,
 		CreatedAt: now,
 	})
 	s.store.counters[action]++

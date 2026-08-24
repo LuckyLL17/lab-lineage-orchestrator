@@ -13,7 +13,8 @@ func (r *Router) command(w http.ResponseWriter, req *http.Request) {
 		writeError(w, http.StatusBadRequest, err)
 		return
 	}
-	command.Subject = domain.ID("http:" + string(command.Subject))
+	subject := domain.ID("http:" + string(command.Subject))
+	command.Subject = subject
 	event, err := r.service.Apply(command)
 	if err != nil {
 		writeError(w, http.StatusUnprocessableEntity, err)
